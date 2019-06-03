@@ -5,3 +5,4 @@ Debug = true
 AuthorizeURL = https://login.microsoftonline.com/xxxxx/oauth2/v2.0/authorize
 ClientID =
 TenantID =
+Scope = User.ReadBasic.All,User.Read.All,User.ReadWrite.All,Directory.Read.All,Directory.ReadWrite.All,Directory.AccessAsUser.All
