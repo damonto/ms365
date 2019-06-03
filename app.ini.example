@@ -1,0 +1,7 @@
+[Runtime]
+Debug = true
+
+[App]
+AuthorizeURL = https://login.microsoftonline.com/xxxxx/oauth2/v2.0/authorize
+ClientID =
+TenantID =
