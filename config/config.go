@@ -9,9 +9,11 @@ import (
 
 // App 配置项
 type App struct {
+	Domain       string
 	AuthorizeURL string
 	ClientID     string
 	TenantID     string
+	Scope        string
 }
 
 // AppConfig 系统配置文件

@@ -2,6 +2,7 @@
 Debug = true
 
 [App]
+Domain = http://127.0.0.1:3000
 AuthorizeURL = https://login.microsoftonline.com/xxxxx/oauth2/v2.0/authorize
 ClientID =
 TenantID =
