@@ -2,8 +2,10 @@
 Debug = true
 
 [App]
-Domain = http://127.0.0.1:3000
+Domain = http://localhost:3000
 AuthorizeURL = https://login.microsoftonline.com/xxxxx/oauth2/v2.0/authorize
+TokenURL = https://login.microsoftonline.com/xxxxx/oauth2/v2.0/token
 ClientID =
+ClientSecret =
 TenantID =
-Scope = User.ReadBasic.All,User.Read.All,User.ReadWrite.All,Directory.Read.All,Directory.ReadWrite.All,Directory.AccessAsUser.All
+Scope = User.ReadWrite.All Directory.ReadWrite.All Directory.AccessAsUser.All

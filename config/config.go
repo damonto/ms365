@@ -11,7 +11,9 @@ import (
 type App struct {
 	Domain       string
 	AuthorizeURL string
+	TokenURL     string
 	ClientID     string
+	ClientSecret string
 	TenantID     string
 	Scope        string
 }
