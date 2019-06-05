@@ -9,7 +9,7 @@ import (
 
 // SubscribedSkus office 365 management dashboard
 func SubscribedSkus(c *gin.Context) {
-	skus, err := request.GetSubscribedSkus()
+	skus, err := request.GetSubscribedSkus(c.Param("userID"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":       "Get subscribed skus failed",

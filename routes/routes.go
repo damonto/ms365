@@ -24,7 +24,7 @@ func InitRoutes() *gin.Engine {
 		config.APIConfig.AccessKey: config.APIConfig.AccessSecret,
 	}))
 	{
-		apiv1.GET("/", skus.SubscribedSkus)
+		apiv1.GET("/skus/:userID", skus.SubscribedSkus)
 	}
 
 	return r
