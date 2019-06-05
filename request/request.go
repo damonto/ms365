@@ -39,13 +39,13 @@ func GetAccessToken(code string) error {
 	}
 
 	expiresIn := time.Duration(accessToken["expires_in"].(float64))
-	model.Db.Create(&model.Account{
+	model.DB.Where(model.Account{Email: me.Email}).Assign(model.Account{
 		UserID:       me.ID,
 		Email:        me.Email,
 		AccessToken:  accessToken["access_token"].(string),
 		RefreshToken: accessToken["refresh_token"].(string),
 		ExpiresIn:    time.Now().Add(expiresIn * time.Second),
-	})
+	}).FirstOrCreate(&model.Account{})
 
 	return nil
 }
