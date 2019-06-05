@@ -2,6 +2,7 @@ package main
 
 import (
 	"office365/config"
+	"office365/model"
 	"office365/routes"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,7 @@ import (
 
 func init() {
 	config.Setup()
+	model.Setup()
 }
 
 func main() {

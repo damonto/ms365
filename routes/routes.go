@@ -1,10 +1,10 @@
 package routes
 
 import (
-	v1 "office365/controllers/v1"
+	"office365/config"
+	"office365/controllers/v1/authorize"
+	"office365/controllers/v1/skus"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,17 +15,16 @@ func InitRoutes() *gin.Engine {
 	// global middlewares
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-	// sessions
-	r.Use(sessions.Sessions("sess", cookie.NewStore([]byte("secret"))))
 
 	// authorize
-	r.GET("/", v1.Authorize)
-	r.GET("/oauth/callback", v1.Callback)
+	r.GET("/", authorize.Authorize)
+	r.GET("/oauth/callback", authorize.Callback)
 
-	// Dashboard
-	dashboard := r.Group("/dashboard")
+	apiv1 := r.Group("/api/v1", gin.BasicAuth(gin.Accounts{
+		config.APIConfig.AccessKey: config.APIConfig.AccessSecret,
+	}))
 	{
-		dashboard.GET("/", v1.Dashboard)
+		apiv1.GET("/", skus.SubscribedSkus)
 	}
 
 	return r
