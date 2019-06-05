@@ -2,6 +2,7 @@ package routes
 
 import (
 	"office365/config"
+	"office365/controllers/v1/account"
 	"office365/controllers/v1/authorize"
 	"office365/controllers/v1/skus"
 
@@ -24,6 +25,7 @@ func InitRoutes() *gin.Engine {
 		config.APIConfig.AccessKey: config.APIConfig.AccessSecret,
 	}))
 	{
+		apiv1.GET("/accounts", account.ListAccount)
 		apiv1.GET("/skus/:userID", skus.SubscribedSkus)
 	}
 
