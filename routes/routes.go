@@ -5,6 +5,7 @@ import (
 	"office365/controllers/v1/account"
 	"office365/controllers/v1/authorize"
 	"office365/controllers/v1/skus"
+	"office365/controllers/v1/user"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,6 +28,7 @@ func InitRoutes() *gin.Engine {
 	{
 		apiv1.GET("/accounts", account.ListAccount)
 		apiv1.GET("/skus/:userID", skus.SubscribedSkus)
+		apiv1.POST("/users", user.CreateUser)
 	}
 
 	return r

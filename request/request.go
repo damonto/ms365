@@ -1,15 +1,18 @@
 package request
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 	"office365/config"
 	"office365/model"
+	"strings"
 	"time"
 
 	"github.com/bluele/gcache"
+	"github.com/prometheus/common/log"
 )
 
 var gc = gcache.New(100).LRU().Build()
@@ -77,8 +80,13 @@ func getAccessTokenFromCache(userID string) (string, error) {
 		defer resp.Body.Close()
 		json.NewDecoder(resp.Body).Decode(&accessToken)
 
+		defer func() {
+			if err := recover(); err != nil {
+				log.Error(err)
+			}
+		}()
 		if accessToken["error"] != nil {
-			return "", fmt.Errorf("%v", accessToken["error_description"])
+			panic(fmt.Errorf("%v", accessToken["error_description"]))
 		}
 
 		var result = model.Account{}
@@ -131,11 +139,11 @@ func GetSubscribedSkus(userID string) ([]interface{}, error) {
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
 
 	resp, err := client.Do(req)
+	var subscribedSkus map[string]interface{}
 	if err != nil {
 		return make([]interface{}, 0), err
 	}
 
-	var subscribedSkus map[string]interface{}
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&subscribedSkus)
 
@@ -148,10 +156,10 @@ func GetSubscribedSkus(userID string) ([]interface{}, error) {
 
 // Sku 可用的 SKU
 type Sku struct {
-	SkuID        string
-	Total        float64
-	Used         float64
-	FriendlyName string
+	SkuID        string  `json:"sku_id"`
+	Total        float64 `json:"total"`
+	Used         float64 `json:"used"`
+	FriendlyName string  `json:"friendly_name"`
 }
 
 func filterSubscribedSkus(subscribedSkus map[string]interface{}) []interface{} {
@@ -171,4 +179,97 @@ func filterSubscribedSkus(subscribedSkus map[string]interface{}) []interface{} {
 	}
 
 	return availableSkus
+}
+
+type newUser struct {
+	AccountEnabled    bool            `json:"accountEnabled"`
+	DisplayName       string          `json:"displayName"`
+	MailNickname      string          `json:"mailNickname"`
+	UserPrincipalName string          `json:"userPrincipalName"`
+	UsageLocation     string          `json:"usageLocation"`
+	PasswordProfile   passwordProfile `json:"passwordProfile"`
+}
+
+type passwordProfile struct {
+	ForceChangePasswordNextSignIn bool   `json:"forceChangePasswordNextSignIn"`
+	Password                      string `json:"password"`
+}
+
+// CreateUser 创建新的 Office 365 用户
+func CreateUser(userID string, enabled bool, nickname string, email string, password string, domain string) (map[string]interface{}, error) {
+	accessToken, _ := getAccessTokenFromCache(userID)
+	newUser := newUser{
+		AccountEnabled:    enabled,
+		DisplayName:       nickname,
+		MailNickname:      strings.Trim(email, " "),
+		UserPrincipalName: strings.Trim(email, " ") + "@" + domain,
+		UsageLocation:     "US",
+		PasswordProfile: passwordProfile{
+			ForceChangePasswordNextSignIn: false,
+			Password:                      password,
+		},
+	}
+	jsonBody, _ := json.Marshal(newUser)
+	client := &http.Client{}
+	req, _ := http.NewRequest("POST", "https://graph.microsoft.com/v1.0/users", bytes.NewBuffer(jsonBody))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+	var user map[string]interface{}
+	if err != nil {
+		return user, err
+	}
+
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&user)
+	if user["error"] != nil {
+		e := user["error"].(map[string]interface{})
+		return user, fmt.Errorf("%v", e["message"])
+	}
+
+	return user, nil
+}
+
+type assignLicense struct {
+	AddLicenses    []addLicenses `json:"addLicenses"`
+	RemoveLicenses []string      `json:"removeLicenses"`
+}
+type addLicenses struct {
+	DisabledPlans []string `json:"disabledPlans"`
+	SkuID         string   `json:"skuId"`
+}
+
+// AssignLicense 分配给用户 License
+func AssignLicense(accountID string, SkuID string, userID string) error {
+	accessToken, _ := getAccessTokenFromCache(accountID)
+	requestData := assignLicense{
+		AddLicenses: []addLicenses{addLicenses{
+			DisabledPlans: []string{},
+			SkuID:         SkuID,
+		}},
+		RemoveLicenses: []string{},
+	}
+
+	client := &http.Client{}
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(requestData)
+	req, _ := http.NewRequest("POST", "https://graph.microsoft.com/v1.0/users/"+userID+"/assignLicense", buf)
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req)
+
+	var license map[string]interface{}
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&license)
+	if license["error"] != nil {
+		e := license["error"].(map[string]interface{})
+		return fmt.Errorf("%v", e["message"])
+	}
+
+	return nil
 }
