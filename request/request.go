@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/bluele/gcache"
-	"github.com/prometheus/common/log"
 )
 
+// gcache
 var gc = gcache.New(100).LRU().Build()
 
 // GetAccessToken 获取 access_token
@@ -82,7 +82,7 @@ func getAccessTokenFromCache(userID string) (string, error) {
 
 		defer func() {
 			if err := recover(); err != nil {
-				log.Error(err)
+				fmt.Printf("%v", err)
 			}
 		}()
 		if accessToken["error"] != nil {
@@ -110,20 +110,40 @@ type Me struct {
 	Email string
 }
 
+func doRequest(method string, uri string, accessToken string, body ...[]byte) (map[string]interface{}, error) {
+	client := &http.Client{}
+	reqBody := bytes.NewBuffer([]byte(""))
+	if body != nil {
+		reqBody = bytes.NewBuffer(body[0])
+	}
+
+	req, err := http.NewRequest(method, "https://graph.microsoft.com/v1.0"+uri, reqBody)
+	var res map[string]interface{}
+	if err != nil {
+		return res, err
+	}
+
+	if accessToken != "" {
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req)
+	if err != nil {
+		return res, err
+	}
+
+	defer resp.Body.Close()
+	json.NewDecoder(resp.Body).Decode(&res)
+
+	return res, nil
+}
+
 // GetMe 获取个人信息
 func GetMe(accessToken string) (Me, error) {
-	client := &http.Client{}
-	req, _ := http.NewRequest("GET", "https://graph.microsoft.com/v1.0/me", nil)
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
-
-	resp, err := client.Do(req)
+	meResp, err := doRequest(http.MethodGet, "/me", accessToken)
 	if err != nil {
 		return Me{}, err
 	}
-
-	var meResp map[string]interface{}
-	defer resp.Body.Close()
-	json.NewDecoder(resp.Body).Decode(&meResp)
 
 	return Me{
 		ID:    meResp["id"].(string),
@@ -134,18 +154,10 @@ func GetMe(accessToken string) (Me, error) {
 // GetSubscribedSkus 订阅的 Skus
 func GetSubscribedSkus(userID string) ([]interface{}, error) {
 	accessToken, _ := getAccessTokenFromCache(userID)
-	client := &http.Client{}
-	req, _ := http.NewRequest("GET", "https://graph.microsoft.com/v1.0/subscribedSkus", nil)
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
-
-	resp, err := client.Do(req)
-	var subscribedSkus map[string]interface{}
+	subscribedSkus, err := doRequest(http.MethodGet, "/subscribedSkus", accessToken)
 	if err != nil {
 		return make([]interface{}, 0), err
 	}
-
-	defer resp.Body.Close()
-	json.NewDecoder(resp.Body).Decode(&subscribedSkus)
 
 	if subscribedSkus["error"] != nil {
 		return make([]interface{}, 0), fmt.Errorf("%v", subscribedSkus["error"].(map[string]interface{})["code"])
@@ -210,19 +222,11 @@ func CreateUser(userID string, enabled bool, nickname string, email string, pass
 		},
 	}
 	jsonBody, _ := json.Marshal(newUser)
-	client := &http.Client{}
-	req, _ := http.NewRequest("POST", "https://graph.microsoft.com/v1.0/users", bytes.NewBuffer(jsonBody))
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := client.Do(req)
-	var user map[string]interface{}
+	user, err := doRequest(http.MethodPost, "/users", accessToken, jsonBody)
 	if err != nil {
 		return user, err
 	}
 
-	defer resp.Body.Close()
-	json.NewDecoder(resp.Body).Decode(&user)
 	if user["error"] != nil {
 		e := user["error"].(map[string]interface{})
 		return user, fmt.Errorf("%v", e["message"])
@@ -251,21 +255,12 @@ func AssignLicense(accountID string, SkuID string, userID string) error {
 		RemoveLicenses: []string{},
 	}
 
-	client := &http.Client{}
-	buf := new(bytes.Buffer)
-	json.NewEncoder(buf).Encode(requestData)
-	req, _ := http.NewRequest("POST", "https://graph.microsoft.com/v1.0/users/"+userID+"/assignLicense", buf)
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", accessToken))
-	req.Header.Set("Content-Type", "application/json")
-	resp, err := client.Do(req)
-
-	var license map[string]interface{}
+	reqBody, _ := json.Marshal(requestData)
+	license, err := doRequest(http.MethodPost, "/users/"+userID+"/assignLicense", accessToken, reqBody)
 	if err != nil {
 		return err
 	}
 
-	defer resp.Body.Close()
-	json.NewDecoder(resp.Body).Decode(&license)
 	if license["error"] != nil {
 		e := license["error"].(map[string]interface{})
 		return fmt.Errorf("%v", e["message"])
