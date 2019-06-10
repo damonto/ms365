@@ -117,7 +117,7 @@ func doRequest(method string, uri string, accessToken string, body ...[]byte) (m
 		reqBody = bytes.NewBuffer(body[0])
 	}
 
-	req, err := http.NewRequest(method, "http://graph.microsoft.com/v1.0"+uri, reqBody)
+	req, err := http.NewRequest(method, "https://graph.microsoft.com/v1.0"+uri, reqBody)
 	var res map[string]interface{}
 	if err != nil {
 		return res, err
