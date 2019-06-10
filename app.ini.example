@@ -3,8 +3,8 @@ Debug = true
 
 [App]
 Domain = http://localhost:3000
-AuthorizeURL = https://login.microsoftonline.com/xxxxx/oauth2/v2.0/authorize
-TokenURL = https://login.microsoftonline.com/xxxxx/oauth2/v2.0/token
+AuthorizeURL = https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+TokenURL = https://login.microsoftonline.com/common/oauth2/v2.0/token
 ClientID =
 ClientSecret =
 TenantID =
