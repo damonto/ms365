@@ -4,7 +4,7 @@ import (
 	"office365/config"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite" //gorm mysql
+	_ "github.com/jinzhu/gorm/dialects/sqlite" //gorm sqlite drive
 )
 
 // DB gorm connection
