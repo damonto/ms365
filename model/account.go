@@ -14,7 +14,7 @@ type Account struct {
 	ExpiresIn    int        `gorm:"type:int:10;not null;column:expires_in" json:"-"`
 	CreatedAt    time.Time  `json:"created_at"`
 	UpdatedAt    time.Time  `json:"updated_at"`
-	DeletedAt    *time.Time `sql:"index" json:"-"`
+	DeletedAt    *time.Time `json:"-"`
 }
 
 // TableName 表名

@@ -11,14 +11,14 @@ import (
 func init() {
 	config.Setup()
 	model.Setup()
-}
-
-func main() {
-	r := routes.InitRoutes()
 
 	if !config.RuntimeConfig.Debug {
 		gin.SetMode(gin.ReleaseMode)
 	}
+}
+
+func main() {
+	r := routes.InitRoutes()
 
 	r.Run()
 }
