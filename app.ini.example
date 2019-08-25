@@ -7,14 +7,6 @@ ClientSecret =
 TenantID =
 Scope = offline_access User.ReadWrite.All Directory.ReadWrite.All Directory.AccessAsUser.All
 
-[Database]
-Host = localhost
-Port = 3306
-User = root
-Password = 123456
-Database = database
-Charset = utf8mb4
-
 [Api]
 AccessKey = 123
 AccessSecret = 123
