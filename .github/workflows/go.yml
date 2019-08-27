@@ -31,7 +31,9 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+        HOST_IP: ${{ secrets.HOST_IP }}
         HOST_NAME: ${{ secrets.HOST_IP }}
+        HOST_FINGERPRINT: ${{ secrets.HOST_FINGERPRINT }}
       with:
         args: "./dist app@$HOST_IP/srv/web/office365"
 
