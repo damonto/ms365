@@ -30,7 +30,7 @@ jobs:
       uses: AEnterprise/rsync-deploy@v1.0
       env:
         DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        ARGS: "-avz --delete"
+        ARGS: "-avz"
         SERVER_PORT: 22
         FOLDER: "dist"
         SERVER_IP: ${{ secrets.HOST_IP }}
