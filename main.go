@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"office365/config"
 	"office365/model"
 	"office365/routes"
@@ -18,6 +19,8 @@ func init() {
 }
 
 func main() {
+	fmt.Println("Office API server running at port 8080")
+
 	r := routes.InitRoutes()
 
 	r.Run()
