@@ -27,10 +27,9 @@ jobs:
       run: go build -ldflags "-s -w" -v -o dist/webapi main.go
      
     - name: Deploy
-      run: |
-        mkdir "$HOME/.ssh"
-        echo ${{ secrets.SSH_PRIVATE_KEY }} > $HOME/.ssh/id_rsa
-        chmod 600 $HOME/.ssh/id_rsa
-        ls -al $HOME/.ssh
-        rsync -Pav -e "ssh -o StrictHostKeyChecking=no" dist app@${{ secrets.HOST_IP }}:/srv/web/office365
+      uses: contention/rsync-deployments@v1.0.0
+      env:
+        DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      with:
+        args: ["-avzr --delete", "dist", "app@${{ secrets.HOST_IP }}:/srv/web/office365"]
 
