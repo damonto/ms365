@@ -24,4 +24,13 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Build
-      run: go build -v .
+      run: go build -ldflags "-s -w" -v -o dist/webapi main.go
+     
+    - name: Rsync Deploy
+      uses: maxheld83/rsync@v0.1.0
+      env:
+        HOST_NAME: ${{ secrets.HOST_IP }}
+      args:
+        - ${{ GITHUB_WORKSPACE }}/dist/webapi
+        - app@${{ HOST_IP }}/srv/web/office365
+
