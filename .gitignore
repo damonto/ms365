@@ -25,3 +25,6 @@ app.ini
 
 # Databases
 sqlite.db
+
+# Compiled
+/dist
