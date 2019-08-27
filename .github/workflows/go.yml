@@ -26,16 +26,8 @@ jobs:
     - name: Build
       run: go build -ldflags "-s -w" -v -o dist/webapi main.go
      
-    - name: Rsync Deploy
-      uses: maxheld83/rsync@v0.1.0
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
-        HOST_IP: ${{ secrets.HOST_IP }}
-        HOST_NAME: ${{ secrets.HOST_IP }}
-        HOST_FINGERPRINT: ${{ secrets.HOST_FINGERPRINT }}
-      with:
-        args: 
-          - "./dist"
-          - "app@$HOST_IP/srv/web/office365"
+    - name: Deploy
+      run: |
+        echo ${{ secrets.SSH_PRIVATE_KEY }} > ~/.deploy_key
+        rsync -Pav -e "ssh -i ~/.deploy_key" app@${{ secrets.HOST_IP }}:./dist /srv/web/office365
 
