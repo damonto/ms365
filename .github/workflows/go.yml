@@ -25,9 +25,9 @@ jobs:
 
     - name: Build
       run: go build -ldflags "-s -w" -v -o dist/webapi main.go
-     
-    - name: Deploy
-      uses: contention/rsync-deployments@v1.0.0
+
+    - name: Actions Rsync
+      uses: damonto/actions-rsync@v1.0.0
       env:
         DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       with:
