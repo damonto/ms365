@@ -31,5 +31,5 @@ jobs:
       env:
         HOST_NAME: ${{ secrets.HOST_IP }}
       with:
-        args: "${{ GITHUB_WORKSPACE }}/dist app@${{ HOST_IP }}/srv/web/office365"
+        args: "./dist app@${{ HOST_IP }}/srv/web/office365"
 
