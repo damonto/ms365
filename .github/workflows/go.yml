@@ -35,5 +35,7 @@ jobs:
         HOST_NAME: ${{ secrets.HOST_IP }}
         HOST_FINGERPRINT: ${{ secrets.HOST_FINGERPRINT }}
       with:
-        args: "./dist app@$HOST_IP/srv/web/office365"
+        args: 
+          - "./dist"
+          - "app@$HOST_IP/srv/web/office365"
 
