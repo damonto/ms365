@@ -28,6 +28,8 @@ jobs:
      
     - name: Deploy
       run: |
+        ls -al .
         echo ${{ secrets.SSH_PRIVATE_KEY }} > ~/.deploy_key
-        rsync -Pav -e "ssh -i ~/.deploy_key" app@${{ secrets.HOST_IP }}:./dist /srv/web/office365
+        chmod 600 ~/.deploy_key
+        rsync -Pav -e "ssh -i ~/.deploy_key -o StrictHostKeyChecking=no" app@${{ secrets.HOST_IP }}:./dist /srv/web/office365
 
