@@ -27,7 +27,7 @@ jobs:
       run: go build -ldflags "-s -w" -v -o dist/webapi main.go
 
     - name: Actions Rsync
-      uses: damonto/actions-rsync@v1.0.0
+      uses: damonto/actions-rsync@v1.0.1
       env:
         DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       with:
