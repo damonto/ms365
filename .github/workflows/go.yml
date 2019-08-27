@@ -30,5 +30,6 @@ jobs:
       uses: maxheld83/rsync@v0.1.0
       env:
         HOST_NAME: ${{ secrets.HOST_IP }}
-      args: ${{ GITHUB_WORKSPACE }}/dist app@${{ HOST_IP }}/srv/web/office365
+      with:
+        args: "${{ GITHUB_WORKSPACE }}/dist app@${{ HOST_IP }}/srv/web/office365"
 
