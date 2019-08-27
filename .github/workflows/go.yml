@@ -25,11 +25,13 @@ jobs:
 
     - name: Build
       run: go build -ldflags "-s -w" -v -o dist/webapi main.go
-
-    - name: Actions Rsync
-      uses: damonto/actions-rsync@v1.0.0-beta
+      
+    - name: Deploy to server
+      uses: AEnterprise/rsync-deploy@v1.0
       env:
         DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      with:
-        args: -avzr --delete dist app@${{ secrets.HOST_IP }}:/srv/web/office365
-
+        SERVER_PORT: 22
+        FOLDER: "dist"
+        SERVER_IP: ${{ secrets.HOST_IP }}
+        USERNAME: "app"
+        SERVER_DESTINATION: "/srv/web/office365"
