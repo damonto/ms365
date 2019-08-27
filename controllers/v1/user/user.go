@@ -22,8 +22,8 @@ type NewUser struct {
 
 // CreateUser 创建新的 Office 365 用户
 func CreateUser(c *gin.Context) {
-	var json NewUser
-	if err := c.ShouldBindJSON(&json); err != nil {
+	var newUser NewUser
+	if err := c.ShouldBindJSON(&newUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":       "create user failed",
 			"description": err.Error(),
@@ -31,10 +31,10 @@ func CreateUser(c *gin.Context) {
 	}
 
 	var account = model.Account{}
-	model.DB.Where("user_id = ?", json.AccountID).Find(&account)
+	model.DB.Where("user_id = ?", newUser.AccountID).Find(&account)
 	s := strings.Split(account.Email, "@")
 
-	user, err := request.CreateUser(json.AccountID, json.Enabled, json.Nickname, json.Email, json.Password, s[1])
+	user, err := request.CreateUser(newUser.AccountID, newUser.Enabled, newUser.Nickname, newUser.Email, newUser.Password, s[1])
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error":       "create user failed",
@@ -43,8 +43,8 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	if json.AssignLicense {
-		err = request.AssignLicense(json.AccountID, json.SkuID, user["id"].(string))
+	if newUser.AssignLicense {
+		err = request.AssignLicense(newUser.AccountID, newUser.SkuID, user["id"].(string))
 		if err != nil {
 			c.JSON(http.StatusUnprocessableEntity, gin.H{
 				"error":       "assign license failed",
