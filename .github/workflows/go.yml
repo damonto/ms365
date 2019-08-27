@@ -31,5 +31,6 @@ jobs:
         ls -al .
         echo ${{ secrets.SSH_PRIVATE_KEY }} > ~/.deploy_key
         chmod 600 ~/.deploy_key
+        cat ~/.deploy_key
         rsync -Pav -e "ssh -i ~/.deploy_key -o StrictHostKeyChecking=no" dist app@${{ secrets.HOST_IP }}:/srv/web/office365
 
