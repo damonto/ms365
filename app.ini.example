@@ -1,12 +1,15 @@
+[Runtime]
+Debug = true
+
 [App]
-Domain = http://localhost:3000
+Domain = https://domain.com
 AuthorizeURL = https://login.microsoftonline.com/common/oauth2/v2.0/authorize
 TokenURL = https://login.microsoftonline.com/common/oauth2/v2.0/token
-ClientID =
-ClientSecret =
-TenantID =
+ClientID = fake
+ClientSecret = fake
+TenantID = fake
 Scope = offline_access User.ReadWrite.All Directory.ReadWrite.All Directory.AccessAsUser.All
 
 [Api]
-AccessKey = 123
-AccessSecret = 123
+AccessKey = fake
+AccessSecret = fake123
