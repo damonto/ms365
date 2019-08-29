@@ -59,7 +59,7 @@ chmod +x binary
 
 ```json
 {
-"data": [
+  "data": [
     {
       "sku_id": "314c4481-f395-4525-be8b-fakefakefake",
       "total": 5000,
@@ -89,7 +89,7 @@ chmod +x binary
 }
 ```
 
-创建用户的时候有几点需要猪注意:
+创建用户的时候有几点需要注意:
 
 1. account_id 是 `获取已授权用户的中的 USER_ID` 这里有一点歧义没有设计好
 2. nickname 随意设置，这里没有限制
