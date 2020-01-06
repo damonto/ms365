@@ -1,5 +1,7 @@
 # Office 365 Web API
 
+这是我第一次用 Go 写代码，只能保证可以运行，代码写的不好，请多见谅。
+
 ### 安装
 
 直接从 release 页面下载对应平台 binary 文件即可。 下载完成后请复制一份 .app.ini.example 放到 binary 文件同级并命名为 app.ini
