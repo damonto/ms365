@@ -3,7 +3,7 @@ package app
 import (
 	"net/http"
 
-	"github.com/damonto/office365/internal/app/controllers"
+	"github.com/damonto/office365/internal/app/controller"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,8 +11,9 @@ import (
 func Handler() http.Handler {
 	r := gin.Default()
 	{
-		authorizeCtrl := new(controllers.AuthorizeController)
+		authorizeCtrl := new(controller.AuthorizeController)
 		r.GET("/", authorizeCtrl.Redirect)
+		r.GET("/oauth/callback", authorizeCtrl.Callback)
 	}
 
 	return r
