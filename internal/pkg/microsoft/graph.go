@@ -22,6 +22,59 @@ func NewGraphAPI() *GraphAPI {
 	}
 }
 
+func (ga *GraphAPI) newRequest(id string) (req *resty.Request, err error) {
+	token, err := ga.getAccessToken(id)
+	if time.Now().After(token.ExpireDate) {
+		token, err = ga.refreshAccessToken(token)
+	}
+
+	req = resty.New().
+		R().
+		SetAuthToken(token.AccessToken)
+
+	return req, err
+}
+
+func (ga *GraphAPI) refreshAccessToken(token AccessToken) (AccessToken, error) {
+	resp, err := ga.resty.
+		SetFormData(map[string]string{
+			"grant_type":    "refresh_token",
+			"client_id":     config.Cfg.Microsoft.ClientID,
+			"client_secret": config.Cfg.Microsoft.ClientSecret,
+			"refresh_token": token.RefreshToken,
+		}).
+		Post(config.Cfg.Microsoft.TokenURL)
+
+	var parser fastjson.Parser
+	parsedToken, err := parser.ParseBytes(resp.Body())
+	if err != nil {
+		return token, err
+	}
+	if len(parsedToken.GetStringBytes("error")) > 0 {
+		return token, errors.New(string(parsedToken.GetStringBytes("error_description")))
+	}
+
+	// Update token
+	token.AccessToken = string(parsedToken.GetStringBytes("access_token"))
+	token.RefreshToken = string(parsedToken.GetStringBytes("refresh_token"))
+	token.ExpireDate = time.Now().Add(time.Duration(parsedToken.GetInt64("expires_in")) * time.Second)
+	err = NewStore().Put(token.ID, token)
+	if err != nil {
+		return token, err
+	}
+
+	return token, nil
+}
+
+func (ga *GraphAPI) getAccessToken(id string) (accessToken AccessToken, err error) {
+	accessToken, err = NewStore().Get(id)
+	if err != nil {
+		return accessToken, errors.New(err.Error())
+	}
+
+	return accessToken, nil
+}
+
 // GetAccessToken get an token with authorization `code`
 func (ga *GraphAPI) GetAccessToken(code string) error {
 	resp, err := ga.resty.

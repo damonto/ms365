@@ -22,6 +22,7 @@ func Handler() http.Handler {
 			accountCtl := new(controller.AccountController)
 			api.GET("/accounts", accountCtl.Accounts)
 			api.DELETE("/accounts/:id", accountCtl.Delete)
+			api.GET("/accounts/:id/skus", accountCtl.Skus)
 		}
 	}
 
