@@ -1,5 +1,5 @@
-# Office 365 Web API
+# Microsoft Online RESTful API
 
-[中文](README_zh.md)
+Microsoft Online RESTful API base on Microsoft Graph API
 
 Code Refactoring.

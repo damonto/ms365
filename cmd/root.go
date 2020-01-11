@@ -3,13 +3,13 @@ package cmd
 import (
 	"os"
 
-	"github.com/damonto/office365/internal/pkg/config"
+	"github.com/damonto/msonline-webapi/internal/pkg/config"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "Office365",
-	Short: "Office 365 Account Management API",
+	Use:   "msonline-webapi",
+	Short: "Microsoft Azure Active Directory RESTful API",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Usage()
 	},

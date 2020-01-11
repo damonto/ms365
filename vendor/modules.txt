@@ -14,8 +14,12 @@ github.com/go-playground/locales
 github.com/go-playground/locales/currency
 # github.com/go-playground/universal-translator v0.16.0
 github.com/go-playground/universal-translator
+# github.com/go-resty/resty/v2 v2.1.0
+github.com/go-resty/resty/v2
 # github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/proto
+# github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db
+github.com/golang/snappy
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
 # github.com/json-iterator/go v1.1.7
@@ -36,8 +40,24 @@ github.com/spf13/cobra
 github.com/spf13/pflag
 # github.com/stretchr/testify v1.4.0
 github.com/stretchr/testify/assert
+# github.com/syndtr/goleveldb v1.0.0
+github.com/syndtr/goleveldb/leveldb
+github.com/syndtr/goleveldb/leveldb/cache
+github.com/syndtr/goleveldb/leveldb/comparer
+github.com/syndtr/goleveldb/leveldb/errors
+github.com/syndtr/goleveldb/leveldb/filter
+github.com/syndtr/goleveldb/leveldb/iterator
+github.com/syndtr/goleveldb/leveldb/journal
+github.com/syndtr/goleveldb/leveldb/memdb
+github.com/syndtr/goleveldb/leveldb/opt
+github.com/syndtr/goleveldb/leveldb/storage
+github.com/syndtr/goleveldb/leveldb/table
+github.com/syndtr/goleveldb/leveldb/util
 # github.com/ugorji/go/codec v1.1.7
 github.com/ugorji/go/codec
+# github.com/valyala/fastjson v1.4.2
+github.com/valyala/fastjson
+github.com/valyala/fastjson/fastfloat
 # go.uber.org/atomic v1.5.0
 go.uber.org/atomic
 # go.uber.org/multierr v1.3.0
@@ -54,6 +74,8 @@ go.uber.org/zap/zapcore
 # golang.org/x/lint v0.0.0-20190930215403-16217165b5de
 golang.org/x/lint
 golang.org/x/lint/golint
+# golang.org/x/net v0.0.0-20190628185345-da137c7871d7
+golang.org/x/net/publicsuffix
 # golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a
 golang.org/x/sys/unix
 # golang.org/x/tools v0.0.0-20191029190741-b9c20aec41a5

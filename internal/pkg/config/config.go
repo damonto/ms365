@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	"github.com/damonto/office365/internal/pkg/logger"
+	"github.com/damonto/msonline-webapi/internal/pkg/logger"
 )
 
 // App is the RESTful API server conf

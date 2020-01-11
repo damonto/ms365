@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/damonto/office365/cmd"
-	"github.com/damonto/office365/internal/pkg/logger"
+	"github.com/damonto/msonline-webapi/cmd"
+	"github.com/damonto/msonline-webapi/internal/pkg/logger"
 )
 
 func main() {

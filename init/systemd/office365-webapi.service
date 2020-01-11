@@ -1,11 +1,11 @@
 [Unit]
 Description=Office 365 Account Management RESTful API
-Documentation=https://github.com/damonto/office365-webapi
+Documentation=https://github.com/damonto/msonline-webapi-webapi
 
 [Service]
 WorkingDirectory=/usr/local/bin
 Restart=on-failure
-ExecStart=/usr/local/bin/office365-webapi serve --conf ~/.config/office365-webapi.toml
+ExecStart=/usr/local/bin/msonline-webapi-webapi serve --conf ~/.config/msonline-webapi-webapi.toml
 ExecReload=/bin/kill -SIGUSR1 $MAINPID
 
 [Install]

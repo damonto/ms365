@@ -1,4 +1,4 @@
-module github.com/damonto/office365
+module github.com/damonto/msonline-webapi
 
 go 1.13
 

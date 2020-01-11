@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/damonto/office365/internal/pkg/config"
+	"github.com/damonto/msonline-webapi/internal/pkg/config"
 	"github.com/go-resty/resty/v2"
 	"github.com/valyala/fastjson"
 )

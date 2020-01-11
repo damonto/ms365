@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/damonto/office365/internal/pkg/logger"
+	"github.com/damonto/msonline-webapi/internal/pkg/logger"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
@@ -58,7 +58,7 @@ func (s *Store) Put(key string, accessToken AccessToken) error {
 	return nil
 }
 
-// Get retrieve a access token by key
+// Get retrieve a access token
 func (s *Store) Get(key string) (accessToken AccessToken, err error) {
 	defer s.db.Close()
 	data, err := s.db.Get([]byte(key), nil)
@@ -68,6 +68,12 @@ func (s *Store) Get(key string) (accessToken AccessToken, err error) {
 
 	err = json.Unmarshal(data, &accessToken)
 	return
+}
+
+// Delete an item from level db
+func (s *Store) Delete(key string) error {
+	defer s.db.Close()
+	return s.db.Delete([]byte(key), nil)
 }
 
 // All retrieve all access token from level db

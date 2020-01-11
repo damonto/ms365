@@ -1,8 +1,9 @@
 package controller
 
-import "testing"
-
-import "github.com/stretchr/testify/assert"
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
 func TestWrap(t *testing.T) {
 	code, wrapped := rootCtl.wrap(200, "message")
