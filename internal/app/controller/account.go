@@ -30,8 +30,7 @@ func (ctl AccountController) Accounts(c *gin.Context) {
 
 // Delete an item from leveldb
 func (ctl AccountController) Delete(c *gin.Context) {
-	err := microsoft.NewStore().Delete(c.Param("id"))
-	if err != nil {
+	if err := microsoft.NewStore().Delete(c.Param("id")); err != nil {
 		c.JSON(rootCtl.wrap(http.StatusInternalServerError, err.Error()))
 		return
 	}

@@ -37,8 +37,7 @@ func (ctl AuthorizeController) Callback(c *gin.Context) {
 		return
 	}
 
-	err := graphAPI.GetAccessToken(c.Query("code"))
-	if err != nil {
+	if err := graphAPI.GetAccessToken(c.Query("code")); err != nil {
 		c.JSON(rootCtl.wrap(http.StatusInternalServerError, err.Error()))
 		return
 	}

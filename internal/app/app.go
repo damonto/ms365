@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/damonto/msonline-webapi/internal/app/controller"
+	"github.com/damonto/msonline-webapi/internal/pkg/config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +17,9 @@ func Handler() http.Handler {
 		r.GET("/oauth/callback", authorizeCtl.Callback)
 	}
 
-	api := r.Group("/api/v1")
+	api := r.Group("/api/v1", gin.BasicAuth(gin.Accounts{
+		config.Cfg.App.AccessKey: config.Cfg.App.AccessSecret,
+	}))
 	{
 		{
 			accountCtl := new(controller.AccountController)
@@ -30,6 +33,7 @@ func Handler() http.Handler {
 		{
 			userCtl := new(controller.UserController)
 			api.GET("/accounts/:id/users", userCtl.Users)
+			api.POST("/accounts/:id/users", userCtl.Create)
 			api.DELETE("/accounts/:id/users/:uid", userCtl.Delete)
 		}
 	}

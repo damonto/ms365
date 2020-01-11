@@ -43,8 +43,8 @@ func (s *Subscribed) ListSubscribedSkus(id string) (skus []Sku, err error) {
 	if err != nil {
 		return skus, err
 	}
-	if len(skusResp.GetStringBytes("error")) > 0 {
-		return skus, errors.New(string(skusResp.GetStringBytes("error_description")))
+	if skusResp.Exists("error") {
+		return skus, errors.New(string(skusResp.Get("error").GetStringBytes("message")))
 	}
 
 	subscribedSkus := skusResp.GetArray("value")
