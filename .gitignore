@@ -20,6 +20,7 @@
 
 # Configurations
 configs/config.toml.prod
+database
 
 # Compiled
 /dist

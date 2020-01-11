@@ -1,6 +1,7 @@
 package microsoft
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -11,8 +12,7 @@ import (
 
 // GraphAPI is the microsoft graph api instance
 type GraphAPI struct {
-	resty    *resty.Request
-	fastjson fastjson.Parser
+	resty *resty.Request
 }
 
 // NewGraphAPI returns microsoft graph api instance
@@ -22,17 +22,10 @@ func NewGraphAPI() *GraphAPI {
 	}
 }
 
-// AccessToken is the microsoft graph api access token sturct
-type AccessToken struct {
-	AccessToken  string    `json:"access_token"`
-	RefreshToken string    `json:"refresh_token"`
-	ExpireDate   time.Time `json:"expire_date"`
-}
-
-// GetAccessToken get an token with authorization	 `code`
+// GetAccessToken get an token with authorization `code`
 func (ga *GraphAPI) GetAccessToken(code string) error {
 	resp, err := ga.resty.
-		SetBody(map[string]string{
+		SetFormData(map[string]string{
 			"grant_type":    "authorization_code",
 			"client_id":     config.Cfg.Microsoft.ClientID,
 			"client_secret": config.Cfg.Microsoft.ClientSecret,
@@ -45,21 +38,35 @@ func (ga *GraphAPI) GetAccessToken(code string) error {
 		return err
 	}
 
-	parsed, err := ga.fastjson.ParseBytes(resp.Body())
+	var parser fastjson.Parser
+	parsedToken, err := parser.ParseBytes(resp.Body())
 	if err != nil {
 		return err
 	}
-	if len(parsed.GetStringBytes("error")) >= 0 {
-		return fmt.Errorf("%v", parsed.GetStringBytes("error_description"))
+	if len(parsedToken.GetStringBytes("error")) > 0 {
+		return errors.New(string(parsedToken.GetStringBytes("error_description")))
 	}
 
-	accessToken := AccessToken{
-		AccessToken:  string(parsed.GetStringBytes("access_token")),
-		RefreshToken: string(parsed.GetStringBytes("refresh_token")),
-		ExpireDate:   time.Now().Add(time.Duration(parsed.GetInt64("expires_in")) * time.Second),
+	token := string(parsedToken.GetStringBytes("access_token"))
+	user, err := ga.resty.SetAuthToken(token).Get("https://graph.microsoft.com/v1.0/me")
+	if err != nil {
+		return err
 	}
 
-	fmt.Println(accessToken)
+	parser = fastjson.Parser{}
+	parsedUser, err := parser.ParseBytes(user.Body())
+	if err != nil {
+		return err
+	}
+
+	id := string(parsedUser.GetStringBytes("id"))
+	NewStore().Put(id, AccessToken{
+		ID:           id,
+		Email:        string(parsedUser.GetStringBytes("mail")),
+		AccessToken:  token,
+		RefreshToken: string(parsedToken.GetStringBytes("refresh_token")),
+		ExpireDate:   time.Now().Add(time.Duration(parsedToken.GetInt64("expires_in")) * time.Second),
+	})
 
 	return nil
 }

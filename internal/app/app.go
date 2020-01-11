@@ -11,9 +11,9 @@ import (
 func Handler() http.Handler {
 	r := gin.Default()
 	{
-		authorizeCtrl := new(controller.AuthorizeController)
-		r.GET("/", authorizeCtrl.Redirect)
-		r.GET("/oauth/callback", authorizeCtrl.Callback)
+		authorizeCtl := new(controller.AuthorizeController)
+		r.GET("/oauth/authorize", authorizeCtl.Redirect)
+		r.GET("/oauth/callback", authorizeCtl.Callback)
 	}
 
 	return r

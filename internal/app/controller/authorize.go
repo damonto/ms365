@@ -30,7 +30,7 @@ func (ctl AuthorizeController) Redirect(c *gin.Context) {
 	c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("%s?%s", config.Cfg.Microsoft.AuthorizeURL, q.Encode()))
 }
 
-// Callback recieve authorize result and use it get an access token
+// Callback recieve authorize result
 func (ctl AuthorizeController) Callback(c *gin.Context) {
 	if c.Query("error") != "" {
 		c.JSON(rootCtl.wrap(http.StatusBadRequest, c.Query("error_description")))
@@ -39,7 +39,7 @@ func (ctl AuthorizeController) Callback(c *gin.Context) {
 
 	err := graphAPI.GetAccessToken(c.Query("code"))
 	if err != nil {
-		c.JSON(rootCtl.wrap(http.StatusInternalServerError, err))
+		c.JSON(rootCtl.wrap(http.StatusInternalServerError, err.Error()))
 		return
 	}
 
