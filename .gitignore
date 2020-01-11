@@ -1,14 +1,9 @@
 # Editor
 .vscode
+.idea
 
 # macOS
 .DS_Store
-
-# Gin
-gin-bin
-
-# Configurations
-app.ini
 
 # Binaries for programs and plugins
 *.exe
@@ -23,8 +18,9 @@ app.ini
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Databases
-sqlite.db
+# Configurations
+configs/config.toml.prod
+database
 
 # Compiled
 /dist

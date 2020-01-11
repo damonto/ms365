@@ -1,27 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"office365/config"
-	"office365/model"
-	"office365/routes"
-
-	"github.com/gin-gonic/gin"
+	"github.com/damonto/msonline-webapi/cmd"
+	"github.com/damonto/msonline-webapi/internal/pkg/logger"
 )
 
-func init() {
-	config.Setup()
-	model.Setup()
-
-	if !config.RuntimeConfig.Debug {
-		gin.SetMode(gin.ReleaseMode)
-	}
-}
-
 func main() {
-	fmt.Println("Office API server running at port 8080")
+	defer logger.Sugar.Sync()
 
-	r := routes.InitRoutes()
-
-	r.Run()
+	cmd.Execute()
 }
