@@ -18,6 +18,7 @@ type App struct {
 // Microsoft it the microsoft graph api conf
 type Microsoft struct {
 	Domain       string
+	Endpoint     string
 	AuthorizeURL string `toml:"authorize_url"`
 	TokenURL     string `toml:"token_url"`
 	ClientID     string `toml:"client_id"`

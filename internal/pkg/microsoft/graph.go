@@ -3,6 +3,7 @@ package microsoft
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/damonto/msonline-webapi/internal/pkg/config"
@@ -20,6 +21,10 @@ func NewGraphAPI() *GraphAPI {
 	return &GraphAPI{
 		resty: resty.New().R(),
 	}
+}
+
+func (ga *GraphAPI) uri(path string) string {
+	return strings.TrimRight(config.Cfg.Microsoft.Endpoint, "/") + path
 }
 
 func (ga *GraphAPI) newRequest(id string) (req *resty.Request, err error) {
@@ -101,7 +106,7 @@ func (ga *GraphAPI) GetAccessToken(code string) error {
 	}
 
 	token := string(parsedToken.GetStringBytes("access_token"))
-	user, err := ga.resty.SetAuthToken(token).Get("https://graph.microsoft.com/v1.0/me")
+	user, err := ga.resty.SetAuthToken(token).Get(ga.uri("/v1.0/me"))
 	if err != nil {
 		return err
 	}

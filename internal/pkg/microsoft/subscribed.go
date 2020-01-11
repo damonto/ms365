@@ -33,7 +33,7 @@ func (s *Subscribed) ListSubscribedSkus(id string) (skus []Sku, err error) {
 		return skus, err
 	}
 
-	resp, err := req.Get("https://graph.microsoft.com/v1.0/subscribedSkus")
+	resp, err := req.Get(s.GraphAPI.uri("/v1.0/subscribedSkus"))
 	if err != nil {
 		return skus, err
 	}
