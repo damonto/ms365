@@ -30,28 +30,11 @@ func (ctl AccountController) Accounts(c *gin.Context) {
 
 // Delete an item from leveldb
 func (ctl AccountController) Delete(c *gin.Context) {
-	id := c.Param("id")
-	if id == "" {
-		c.JSON(rootCtl.wrap(http.StatusUnprocessableEntity, "id can not be null"))
-		return
-	}
-
-	err := microsoft.NewStore().Delete(id)
+	err := microsoft.NewStore().Delete(c.Param("id"))
 	if err != nil {
 		c.JSON(rootCtl.wrap(http.StatusInternalServerError, err.Error()))
 		return
 	}
 
 	c.JSON(rootCtl.wrap(http.StatusOK))
-}
-
-// Skus Get the list of commercial subscriptions that an organization has acquired.
-func (ctl AccountController) Skus(c *gin.Context) {
-	skus, err := microsoft.NewSubscribed().ListSubscribedSkus(c.Param("id"))
-	if err != nil {
-		c.JSON(rootCtl.wrap(http.StatusInternalServerError, err.Error()))
-		return
-	}
-
-	c.JSON(rootCtl.wrap(http.StatusOK, skus))
 }
