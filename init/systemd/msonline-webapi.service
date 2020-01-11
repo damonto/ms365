@@ -1,0 +1,12 @@
+[Unit]
+Description=Microsoft Online RESTful API
+Documentation=https://github.com/damonto/msonline-webapi
+
+[Service]
+WorkingDirectory=/usr/local/bin
+Restart=on-failure
+ExecStart=/usr/local/bin/msonline serve --conf ~/.config/msonline.toml
+ExecReload=/bin/kill -SIGUSR1 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
