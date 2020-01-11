@@ -51,7 +51,7 @@ func (s *Subscribed) ListSubscribedSkus(id string) (skus []Sku, err error) {
 	for _, sku := range subscribedSkus {
 		if string(sku.GetStringBytes("capabilityStatus")) == "Enabled" {
 			skus = append(skus, Sku{
-				ID:            string(sku.GetStringBytes("id")),
+				ID:            string(sku.GetStringBytes("skuId")),
 				Name:          Skus[string(sku.GetStringBytes("skuPartNumber"))],
 				ConsumedUnits: sku.GetInt64("consumedUnits"),
 				PrepaidUnits:  sku.Get("prepaidUnits").GetInt64("enabled"),
