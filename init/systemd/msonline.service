@@ -1,6 +1,6 @@
 [Unit]
 Description=Microsoft Online RESTful API
-Documentation=https://github.com/damonto/msonline-webapi
+Documentation=https://github.com/damonto/msonline
 
 [Service]
 WorkingDirectory=/usr/local/bin

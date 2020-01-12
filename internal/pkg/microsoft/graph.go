@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/damonto/msonline-webapi/internal/pkg/config"
+	"github.com/damonto/msonline/internal/pkg/config"
 	"github.com/go-resty/resty/v2"
 	"github.com/valyala/fastjson"
 )

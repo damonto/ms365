@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/damonto/msonline-webapi/internal/pkg/config"
-	"github.com/damonto/msonline-webapi/internal/pkg/microsoft"
+	"github.com/damonto/msonline/internal/pkg/config"
+	"github.com/damonto/msonline/internal/pkg/microsoft"
 	"github.com/gin-gonic/gin"
 )
 

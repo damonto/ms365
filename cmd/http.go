@@ -8,15 +8,15 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/damonto/msonline-webapi/internal/app"
-	"github.com/damonto/msonline-webapi/internal/pkg/config"
-	"github.com/damonto/msonline-webapi/internal/pkg/logger"
+	"github.com/damonto/msonline/internal/app"
+	"github.com/damonto/msonline/internal/pkg/config"
+	"github.com/damonto/msonline/internal/pkg/logger"
 	"github.com/spf13/cobra"
 )
 
 var httpCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "Serve the microsoft azure active directory RESTful API",
+	Short: "Serve the microsoft online RESTful API",
 	Run: func(cmd *cobra.Command, args []string) {
 		srv := &http.Server{
 			Addr:         config.Cfg.App.ListenAddr,

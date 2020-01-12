@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/damonto/msonline-webapi/internal/pkg/microsoft"
+	"github.com/damonto/msonline/internal/pkg/microsoft"
 	"github.com/gin-gonic/gin"
 )
 

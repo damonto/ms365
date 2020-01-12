@@ -1,4 +1,4 @@
-module github.com/damonto/msonline-webapi
+module github.com/damonto/msonline
 
 go 1.13
 

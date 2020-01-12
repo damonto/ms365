@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/damonto/msonline-webapi/internal/pkg/logger"
+	"github.com/damonto/msonline/internal/pkg/logger"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 

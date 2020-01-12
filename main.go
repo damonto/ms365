@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/damonto/msonline-webapi/cmd"
-	"github.com/damonto/msonline-webapi/internal/pkg/logger"
+	"github.com/damonto/msonline/cmd"
+	"github.com/damonto/msonline/internal/pkg/logger"
 )
 
 func main() {
