@@ -26,7 +26,7 @@
 
 ```bash
 chmod +x msonline
-GIN_MODE=release ./msonline --conf configs/config.toml
+GIN_MODE=release ./msonline serve --conf configs/config.toml
 ```
 
 如果需要守护运行请自行采用 PM2、Supervisor 等. 同时我在在 `init` 目录中提供了 `systemd` 的配置文件可以复制到 `/etc/systemd/system/msonline.service` 使用。
