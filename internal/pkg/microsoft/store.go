@@ -43,7 +43,7 @@ func NewStore() *Store {
 }
 
 // Put a new access token into level db
-func (s *Store) Put(key string, accessToken AccessToken) error {
+func (s *Store) Put(key string, accessToken AccessToken) (err error) {
 	defer s.db.Close()
 	b, err := json.Marshal(accessToken)
 	if err != nil {

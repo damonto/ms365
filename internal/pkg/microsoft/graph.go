@@ -81,7 +81,7 @@ func (ga *GraphAPI) getAccessToken(id string) (accessToken AccessToken, err erro
 }
 
 // GetAccessToken get an token with authorization `code`
-func (ga *GraphAPI) GetAccessToken(code string) error {
+func (ga *GraphAPI) GetAccessToken(code string) (err error) {
 	resp, err := ga.resty.
 		SetFormData(map[string]string{
 			"grant_type":    "authorization_code",

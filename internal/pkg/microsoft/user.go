@@ -2,6 +2,7 @@ package microsoft
 
 import (
 	"errors"
+	"net/http"
 	"net/url"
 	"strings"
 
@@ -80,7 +81,7 @@ func (u *User) Users(id string, next string) (response map[string]interface{}, e
 }
 
 // Delete user
-func (u *User) Delete(id string, uid string) error {
+func (u *User) Delete(id string, uid string) (err error) {
 	req, err := u.GraphAPI.newRequest(id)
 	if err != nil {
 		return err
@@ -89,14 +90,15 @@ func (u *User) Delete(id string, uid string) error {
 	if err != nil {
 		return err
 	}
-
-	var parser fastjson.Parser
-	dResp, err := parser.ParseBytes(resp.Body())
-	if err != nil {
-		return err
-	}
-	if dResp.Exists("error") {
-		return errors.New(string(dResp.Get("error").GetStringBytes("message")))
+	if resp.StatusCode() != http.StatusNoContent {
+		var parser fastjson.Parser
+		uResp, err := parser.ParseBytes(resp.Body())
+		if err != nil {
+			return err
+		}
+		if uResp.Exists("error") {
+			return errors.New(string(uResp.Get("error").GetStringBytes("message")))
+		}
 	}
 
 	return nil
@@ -112,53 +114,56 @@ type CreateUserRequest struct {
 }
 
 // Create new user
-func (u *User) Create(id string, cr CreateUserRequest) error {
+func (u *User) Create(id string, cr CreateUserRequest) (uid string, err error) {
 	req, err := u.GraphAPI.newRequest(id)
 	if err != nil {
-		return err
+		return uid, err
 	}
 
 	if cr.Domain == "" {
 		token, err := u.GraphAPI.getAccessToken(id)
 		if err != nil {
-			return err
+			return uid, err
 		}
 		boom := strings.Split(token.Email, "@")
 		cr.Domain = boom[1]
 	}
 
-	resp, err := req.SetBody(map[string]interface{}{
-		"accountEnabled":    true,
-		"displayName":       cr.Name,
-		"mailNickname":      cr.PrincipalName,
-		"userPrincipalName": cr.PrincipalName + "@" + cr.Domain,
-		"usageLocation":     "US",
-		"passwordProfile": map[string]interface{}{
-			"forceChangePasswordNextSignIn": false,
-			"password":                      cr.Password,
-		},
-	}).Post(u.GraphAPI.uri("/v1.0/users"))
+	resp, err := req.
+		SetBody(map[string]interface{}{
+			"accountEnabled":    true,
+			"displayName":       cr.Name,
+			"mailNickname":      cr.PrincipalName,
+			"userPrincipalName": cr.PrincipalName + "@" + cr.Domain,
+			"usageLocation":     "US",
+			"passwordProfile": map[string]interface{}{
+				"forceChangePasswordNextSignIn": false,
+				"password":                      cr.Password,
+			},
+		}).
+		Post(u.GraphAPI.uri("/v1.0/users"))
 
 	var parser fastjson.Parser
 	uResp, err := parser.ParseBytes(resp.Body())
 	if err != nil {
-		return err
+		return uid, err
 	}
 	if uResp.Exists("error") {
-		return errors.New(string(uResp.Get("error").GetStringBytes("message")))
+		return uid, errors.New(string(uResp.Get("error").GetStringBytes("message")))
 	}
 
+	uid = string(uResp.GetStringBytes("id"))
 	if cr.SkuID != "" {
-		err = u.assignLicense(id, string(uResp.GetStringBytes("id")), cr.SkuID)
+		err = u.assignLicense(id, uid, cr.SkuID)
 		if err != nil {
-			return err
+			return uid, err
 		}
 	}
 
-	return nil
+	return uid, nil
 }
 
-func (u *User) assignLicense(id string, uid string, skuID string) error {
+func (u *User) assignLicense(id string, uid string, skuID string) (err error) {
 	req, err := u.GraphAPI.newRequest(id)
 	if err != nil {
 		return err
@@ -183,6 +188,69 @@ func (u *User) assignLicense(id string, uid string, skuID string) error {
 	}
 	if assignResp.Exists("error") {
 		return errors.New(string(assignResp.Get("error").GetStringBytes("message")))
+	}
+
+	return nil
+}
+
+// MSUser is microsoft user object
+type MSUser struct {
+	ID          string `json:"id"`
+	Email       string `json:"email"`
+	DisplayName string `json:"display_name"`
+	Location    string `json:"location"`
+}
+
+// Retrieve the properties and relationships of user object.
+func (u *User) Retrieve(id string, uid string) (user MSUser, err error) {
+	req, err := u.GraphAPI.newRequest(id)
+	if err != nil {
+		return user, err
+	}
+	resp, err := req.Get(u.GraphAPI.uri("/v1.0/users/" + uid))
+	var parser fastjson.Parser
+	uResp, err := parser.ParseBytes(resp.Body())
+	if err != nil {
+		return user, err
+	}
+	if uResp.Exists("error") {
+		return user, errors.New(string(uResp.Get("error").GetStringBytes("message")))
+	}
+
+	return MSUser{
+		ID:          string(uResp.GetStringBytes("id")),
+		Email:       string(uResp.GetStringBytes("mail")),
+		DisplayName: string(uResp.GetStringBytes("displayName")),
+		Location:    string(uResp.GetStringBytes("officeLocation")),
+	}, nil
+}
+
+// UpdatePassword reset user password
+func (u *User) UpdatePassword(id string, uid string, password string) (err error) {
+	req, err := u.GraphAPI.newRequest(id)
+	if err != nil {
+		return err
+	}
+	resp, err := req.
+		SetBody(map[string]interface{}{
+			"passwordProfile": map[string]interface{}{
+				"forceChangePasswordNextSignIn": false,
+				"password":                      password,
+			},
+		}).
+		Patch(u.GraphAPI.uri("/v1.0/users/" + uid))
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode() != http.StatusNoContent {
+		var parser fastjson.Parser
+		uResp, err := parser.ParseBytes(resp.Body())
+		if err != nil {
+			return err
+		}
+		if uResp.Exists("error") {
+			return errors.New(string(uResp.Get("error").GetStringBytes("message")))
+		}
 	}
 
 	return nil

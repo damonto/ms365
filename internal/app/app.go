@@ -22,19 +22,21 @@ func Handler() http.Handler {
 	}))
 	{
 		{
-			accountCtl := new(controller.AccountController)
-			api.GET("/accounts", accountCtl.Accounts)
-			api.DELETE("/accounts/:id", accountCtl.Delete)
+			ctl := new(controller.AccountController)
+			api.GET("/accounts", ctl.Accounts)
+			api.DELETE("/accounts/:id", ctl.Delete)
 		}
 		{
-			skuCtl := new(controller.SkuController)
-			api.GET("/accounts/:id/skus", skuCtl.Skus)
+			ctl := new(controller.SubscribedController)
+			api.GET("/accounts/:id/skus", ctl.Skus)
 		}
 		{
-			userCtl := new(controller.UserController)
-			api.GET("/accounts/:id/users", userCtl.Users)
-			api.POST("/accounts/:id/users", userCtl.Create)
-			api.DELETE("/accounts/:id/users/:uid", userCtl.Delete)
+			ctl := new(controller.UserController)
+			api.GET("/accounts/:id/users", ctl.Users)
+			api.POST("/accounts/:id/users", ctl.Create)
+			api.GET("/accounts/:id/users/:uid", ctl.User)
+			api.PATCH("/accounts/:id/users/:uid", ctl.Update)
+			api.DELETE("/accounts/:id/users/:uid", ctl.Delete)
 		}
 	}
 
