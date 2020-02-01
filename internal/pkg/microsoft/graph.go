@@ -13,13 +13,13 @@ import (
 
 // GraphAPI is the microsoft graph api instance
 type GraphAPI struct {
-	resty *resty.Request
+	resty *resty.Client
 }
 
 // NewGraphAPI returns microsoft graph api instance
 func NewGraphAPI() *GraphAPI {
 	return &GraphAPI{
-		resty: resty.New().R(),
+		resty: resty.New(),
 	}
 }
 
@@ -41,7 +41,7 @@ func (ga *GraphAPI) newRequest(id string) (req *resty.Request, err error) {
 }
 
 func (ga *GraphAPI) refreshAccessToken(token AccessToken) (AccessToken, error) {
-	resp, err := ga.resty.
+	resp, err := ga.resty.R().
 		SetFormData(map[string]string{
 			"grant_type":    "refresh_token",
 			"client_id":     config.Cfg.Microsoft.ClientID,
@@ -82,7 +82,7 @@ func (ga *GraphAPI) getAccessToken(id string) (accessToken AccessToken, err erro
 
 // GetAccessToken get an token with authorization `code`
 func (ga *GraphAPI) GetAccessToken(code string) (err error) {
-	resp, err := ga.resty.
+	resp, err := ga.resty.R().
 		SetFormData(map[string]string{
 			"grant_type":    "authorization_code",
 			"client_id":     config.Cfg.Microsoft.ClientID,
@@ -106,7 +106,7 @@ func (ga *GraphAPI) GetAccessToken(code string) (err error) {
 	}
 
 	token := string(parsedToken.GetStringBytes("access_token"))
-	user, err := ga.resty.SetAuthToken(token).Get(ga.uri("/v1.0/me"))
+	user, err := ga.resty.R().SetAuthToken(token).Get(ga.uri("/v1.0/me"))
 	if err != nil {
 		return err
 	}
