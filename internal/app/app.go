@@ -3,9 +3,10 @@ package app
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/damonto/msonline/internal/app/controller"
 	"github.com/damonto/msonline/internal/pkg/config"
-	"github.com/gin-gonic/gin"
 )
 
 // Handler returns the Gin engine

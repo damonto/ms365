@@ -6,9 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/damonto/msonline/internal/pkg/config"
 	"github.com/go-resty/resty/v2"
 	"github.com/valyala/fastjson"
+
+	"github.com/damonto/msonline/internal/pkg/config"
 )
 
 // GraphAPI is the microsoft graph api instance

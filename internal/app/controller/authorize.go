@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/damonto/msonline/internal/pkg/config"
 	"github.com/damonto/msonline/internal/pkg/microsoft"
-	"github.com/gin-gonic/gin"
 )
 
 // AuthorizeController struct

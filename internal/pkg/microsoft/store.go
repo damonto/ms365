@@ -5,8 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/damonto/msonline/internal/pkg/logger"
 	"github.com/syndtr/goleveldb/leveldb"
+
+	"github.com/damonto/msonline/internal/pkg/logger"
 )
 
 // AccessToken is the microsoft graph api access token sturct

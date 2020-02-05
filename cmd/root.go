@@ -3,8 +3,9 @@ package cmd
 import (
 	"os"
 
-	"github.com/damonto/msonline/internal/pkg/config"
 	"github.com/spf13/cobra"
+
+	"github.com/damonto/msonline/internal/pkg/config"
 )
 
 var rootCmd = &cobra.Command{

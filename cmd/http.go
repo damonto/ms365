@@ -8,10 +8,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/spf13/cobra"
+
 	"github.com/damonto/msonline/internal/app"
 	"github.com/damonto/msonline/internal/pkg/config"
 	"github.com/damonto/msonline/internal/pkg/logger"
-	"github.com/spf13/cobra"
 )
 
 var httpCmd = &cobra.Command{
