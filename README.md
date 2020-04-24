@@ -118,7 +118,7 @@ GIN_MODE=release ./msonline serve --conf configs/config.toml
 
 #### 删除用户
 
-`POST` https://domain.com/api/v1/accounts/{id}/users/{uid/principal_name}
+`DELETE` https://domain.com/api/v1/accounts/{id}/users/{uid/principal_name}
 
 #### 返回值
 
