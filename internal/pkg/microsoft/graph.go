@@ -9,7 +9,7 @@ import (
 	"github.com/go-resty/resty/v2"
 	"github.com/valyala/fastjson"
 
-	"github.com/damonto/msonline/internal/pkg/config"
+	"github.com/damonto/ms365/internal/pkg/config"
 )
 
 // GraphAPI is the microsoft graph api instance

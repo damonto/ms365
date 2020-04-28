@@ -7,7 +7,7 @@ import (
 
 	"github.com/syndtr/goleveldb/leveldb"
 
-	"github.com/damonto/msonline/internal/pkg/logger"
+	"github.com/damonto/ms365/internal/pkg/logger"
 )
 
 // AccessToken is the microsoft graph api access token sturct

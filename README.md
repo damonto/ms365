@@ -1,4 +1,4 @@
-# Microsoft Online RESTful API
+# Microsoft 365 RESTful API
 
 ### 安装
 
@@ -25,11 +25,11 @@
 因为是 binary 文件您可以按照一下命令运行：
 
 ```bash
-chmod +x msonline
-GIN_MODE=release ./msonline serve --conf configs/config.toml
+chmod +x ms365
+GIN_MODE=release ./ms365 serve --conf configs/config.toml
 ```
 
-如果需要守护运行请自行采用 PM2、Supervisor 等. 同时我在在 `init` 目录中提供了 `systemd` 的配置文件可以复制到 `/etc/systemd/system/msonline.service` 使用。
+如果需要守护运行请自行采用 PM2、Supervisor 等. 同时我在在 `init` 目录中提供了 `systemd` 的配置文件可以复制到 `/etc/systemd/system/ms365.service` 使用。
 
 ### API 接口
 

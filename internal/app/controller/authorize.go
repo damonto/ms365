@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/damonto/msonline/internal/pkg/config"
-	"github.com/damonto/msonline/internal/pkg/microsoft"
+	"github.com/damonto/ms365/internal/pkg/config"
+	"github.com/damonto/ms365/internal/pkg/microsoft"
 )
 
 // AuthorizeController struct

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/damonto/msonline/internal/app/controller"
-	"github.com/damonto/msonline/internal/pkg/config"
+	"github.com/damonto/ms365/internal/app/controller"
+	"github.com/damonto/ms365/internal/pkg/config"
 )
 
 // Handler returns the Gin engine

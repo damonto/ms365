@@ -1,12 +1,12 @@
 [Unit]
-Description=Microsoft Online RESTful API
-Documentation=https://github.com/damonto/msonline
+Description=Microsoft 365 RESTful API
+Documentation=https://github.com/damonto/ms365
 
 [Service]
 WorkingDirectory=/usr/local/bin
 Restart=on-failure
 Environment=GIN_MODE=release
-ExecStart=/usr/local/bin/msonline serve --conf ~/.config/msonline.toml
+ExecStart=/usr/local/bin/ms365 serve --conf ~/.config/ms365.toml
 ExecReload=/bin/kill -SIGUSR1 $MAINPID
 
 [Install]

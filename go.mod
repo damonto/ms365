@@ -1,4 +1,4 @@
-module github.com/damonto/msonline
+module github.com/damonto/ms365
 
 go 1.13
 

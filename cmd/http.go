@@ -10,14 +10,14 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/damonto/msonline/internal/app"
-	"github.com/damonto/msonline/internal/pkg/config"
-	"github.com/damonto/msonline/internal/pkg/logger"
+	"github.com/damonto/ms365/internal/app"
+	"github.com/damonto/ms365/internal/pkg/config"
+	"github.com/damonto/ms365/internal/pkg/logger"
 )
 
 var httpCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "Serve the microsoft online RESTful API",
+	Short: "Serve the microsoft 365 RESTful API",
 	Run: func(cmd *cobra.Command, args []string) {
 		srv := &http.Server{
 			Addr:         config.Cfg.App.ListenAddr,

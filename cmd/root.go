@@ -5,12 +5,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/damonto/msonline/internal/pkg/config"
+	"github.com/damonto/ms365/internal/pkg/config"
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "msonline",
-	Short: "Microsoft Online RESTful API",
+	Use:   "ms365",
+	Short: "Microsoft 365 RESTful API",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Usage()
 	},
