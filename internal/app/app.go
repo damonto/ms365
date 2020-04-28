@@ -6,12 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/damonto/ms365/internal/app/controller"
+	"github.com/damonto/ms365/internal/app/middleware"
 	"github.com/damonto/ms365/internal/pkg/config"
 )
 
 // Handler returns the Gin engine
 func Handler() http.Handler {
 	r := gin.Default()
+	r.Use(middleware.CORS())
 	{
 		authorizeCtl := new(controller.AuthorizeController)
 		r.GET("/oauth/authorize", authorizeCtl.Redirect)
