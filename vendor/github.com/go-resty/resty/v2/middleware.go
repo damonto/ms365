@@ -1,4 +1,4 @@
-// Copyright (c) 2015-2019 Jeevanandam M (jeeva@myjeeva.com), All rights reserved.
+// Copyright (c) 2015-2020 Jeevanandam M (jeeva@myjeeva.com), All rights reserved.
 // resty source code and usage is governed by a MIT style
 // license that can be found in the LICENSE file.
 
@@ -195,15 +195,15 @@ func createHTTPRequest(c *Client, r *Request) (err error) {
 		r.RawRequest.URL.Host = r.URL
 	}
 
-	// Use context if it was specified
-	if r.ctx != nil {
-		r.RawRequest = r.RawRequest.WithContext(r.ctx)
-	}
-
 	// Enable trace
 	if c.trace || r.trace {
 		r.clientTrace = &clientTrace{}
-		r.RawRequest = r.RawRequest.WithContext(r.clientTrace.createContext())
+		r.ctx = r.clientTrace.createContext(r.Context())
+	}
+
+	// Use context if it was specified
+	if r.ctx != nil {
+		r.RawRequest = r.RawRequest.WithContext(r.ctx)
 	}
 
 	// assign get body func for the underlying raw request instance
@@ -265,7 +265,7 @@ func addCredentials(c *Client, r *Request) error {
 func requestLogger(c *Client, r *Request) error {
 	if c.Debug {
 		rr := r.RawRequest
-		rl := &RequestLog{Header: copyHeaders(rr.Header), Body: r.fmtBodyString()}
+		rl := &RequestLog{Header: copyHeaders(rr.Header), Body: r.fmtBodyString(c.debugBodySizeLimit)}
 		if c.requestLog != nil {
 			if err := c.requestLog(rl); err != nil {
 				return err
@@ -330,6 +330,7 @@ func parseResponseBody(c *Client, res *Response) (err error) {
 	if IsJSONType(ct) || IsXMLType(ct) {
 		// HTTP status code > 199 and < 300, considered as Result
 		if res.IsSuccess() {
+			res.Request.Error = nil
 			if res.Request.Result != nil {
 				err = Unmarshalc(c, ct, res.body, res.Request.Result)
 				return

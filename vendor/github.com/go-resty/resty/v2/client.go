@@ -1,4 +1,4 @@
-// Copyright (c) 2015-2019 Jeevanandam M (jeeva@myjeeva.com), All rights reserved.
+// Copyright (c) 2015-2020 Jeevanandam M (jeeva@myjeeva.com), All rights reserved.
 // resty source code and usage is governed by a MIT style
 // license that can be found in the LICENSE file.
 
@@ -366,7 +366,7 @@ func (c *Client) SetDebug(d bool) *Client {
 	return c
 }
 
-// SetDebugBodyLimit sets the maximum size for which the response body will be logged in debug mode.
+// SetDebugBodyLimit sets the maximum size for which the response and request body will be logged in debug mode.
 //		client.SetDebugBodyLimit(1000000)
 func (c *Client) SetDebugBodyLimit(sl int64) *Client {
 	c.debugBodySizeLimit = sl
@@ -606,9 +606,25 @@ func (c *Client) SetRootCertificate(pemFilePath string) *Client {
 	return c
 }
 
+// SetRootCertificateFromString method helps to add one or more root certificates into Resty client
+// 		client.SetRootCertificateFromString("pem file content")
+func (c *Client) SetRootCertificateFromString(pemContent string) *Client {
+	config, err := c.tlsConfig()
+	if err != nil {
+		c.log.Errorf("%v", err)
+		return c
+	}
+	if config.RootCAs == nil {
+		config.RootCAs = x509.NewCertPool()
+	}
+
+	config.RootCAs.AppendCertsFromPEM([]byte(pemContent))
+	return c
+}
+
 // SetOutputDirectory method sets output directory for saving HTTP response into file.
 // If the output directory not exists then resty creates one. This setting is optional one,
-// if you're planning using absoule path in `Request.SetOutput` and can used together.
+// if you're planning using absolute path in `Request.SetOutput` and can used together.
 // 		client.SetOutputDirectory("/save/http/response/here")
 func (c *Client) SetOutputDirectory(dirPath string) *Client {
 	c.outputDirectory = dirPath
