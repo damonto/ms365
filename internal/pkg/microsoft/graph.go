@@ -81,7 +81,7 @@ func (ga *GraphAPI) getAccessToken(id string) (accessToken AccessToken, err erro
 	return accessToken, nil
 }
 
-// GetAccessToken get an token with authorization `code`
+// GetAccessToken get a token with authorization `code`
 func (ga *GraphAPI) GetAccessToken(code string) (err error) {
 	resp, err := ga.resty.R().
 		SetFormData(map[string]string{
