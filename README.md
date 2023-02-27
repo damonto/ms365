@@ -29,7 +29,7 @@ chmod +x ms365
 GIN_MODE=release ./ms365 serve --conf configs/config.toml
 ```
 
-如果需要守护运行请自行采用 PM2、Supervisor 等. 同时我在在 `init` 目录中提供了 `systemd` 的配置文件可以复制到 `/etc/systemd/system/ms365.service` 使用。
+如果需要守护运行请自行采用 PM2、Supervisor 等. 同时我在 `init` 目录中提供了 `systemd` 的配置文件可以复制到 `/etc/systemd/system/ms365.service` 使用。
 
 ### API 接口
 
@@ -58,7 +58,7 @@ GIN_MODE=release ./ms365 serve --conf configs/config.toml
 
 这里删除只是从本地数据库中删除，如果要取消后台请前往 Microsoft Azure 后台操作
 
-`GET` https://domain.com/api/v1/accounts/{id}
+`DELETE` https://domain.com/api/v1/accounts/{id}
 
 ##### 返回值
 
