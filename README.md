@@ -1,4 +1,4 @@
-# Microsoft 365 RESTful API
+# Microsoft 365 User Management RESTful API
 
 ### 安装
 
